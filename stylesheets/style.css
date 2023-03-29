@@ -1,0 +1,38 @@
+p {
+	margin: 0.1em;
+}
+
+main p {
+	text-align: center;
+}
+
+.status {
+	background-color: red;
+	width: 1.5em;
+	height: 1.5em;
+}
+
+input {
+	text-align: center;
+	font-size: 4em;
+	font-style: italic;
+	margin: auto;
+	display: block;
+}
+
+.training {
+	font-size: 4em;
+	font-style: italic;
+}
+
+.word {
+	font-size: 4em;
+}
+
+.transcription {
+	font-size: 3em;
+}
+
+.translation {
+	font-size: 3em;
+}
