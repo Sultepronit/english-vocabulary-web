@@ -48,26 +48,28 @@ function nextCard() {
 	$(".word").css("border-bottom", "6px solid white");
 	
 	var nextCardStatusIndex = (sessionList.length < 5) ? 0 : randomFromRange(0, sessionList.length - 1);
-	console.log(nextCardStatusIndex + ": " + sessionList[nextCardStatusIndex]);
+	var learnStatus = sessionList[nextCardStatusIndex];
+	console.log(nextCardStatusIndex + ": " + learnStatus);
 	sessionList.splice(nextCardStatusIndex, 1);
 	console.log(sessionList);
 	
 	var currentCardId = 0;
-	switch(sessionList[nextCardStatusIndex]) {
+	switch(learnStatus) {
 		case "REPEAT":
+			console.log("repeat!");
 			currentCardIndex = randomFromRange(0, repeatList.length - 1);
-			//currentCard = dbArray[ repeatList[currentCardIndex] ];
 			currentCardId = repeatList[currentCardIndex];
 			repeatList.splice(currentCardIndex, 1);
 			break;
 		case "CONFIRM":
+			console.log("confirm!");
 			currentCardIndex = randomFromRange(0, confirmList.length - 1);
 			currentCardId = confirmList[currentCardIndex];
 			confirmList.splice(currentCardIndex, 1);
 			break;
 		case "LEARN":
+			console.log("learn!");
 			currentCardIndex = randomFromRange(0, learnList.length - 1);
-			//currentCard = dbArray[ learnList[currentCardIndex] ];
 			currentCardId = learnList[currentCardIndex];
 			learnList.splice(currentCardIndex, 1);//////!!!!!!!
 			console.log(learnList);
@@ -76,6 +78,7 @@ function nextCard() {
 			console.log("SOMETHING IS JUST WRONG!!!!!!!!!");
 			break;
 	}
+	console.log("index: " + currentCardIndex);
 	$(".card-number").text(currentCardId);
 	currentCard = dbArray[currentCardId];
 	
@@ -99,8 +102,6 @@ function askQuestion() {
 	//console.log(currentCard);
 	$(".transcription").text(" ");
 	if(direction == "FORWARD") {
-		/*$("input").hide();
-		$(".typed-in").show();*/
 		hideInput();
 		
 		$(".word").text(currentCard[5]);
@@ -137,7 +138,8 @@ function evaluateAnswer() {
 function showAnswer() {
 	console.log(currentCard);
 	progress = "EVALUATE";
-	speakGenerate();
+	//speakGenerate();
+	playSound();
 	
 	$(".transcription").text(currentCard[6]);
 	if(direction == "FORWARD") {
@@ -162,6 +164,7 @@ function saveProgress() {
 function startTraining() {
 	progress = "TRAINING";
 	showInput();
+	//nextCard();
 }
 
 function endTraining() {

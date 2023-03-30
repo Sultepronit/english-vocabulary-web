@@ -16,7 +16,8 @@ function hideInput() {
 }
 
 function playSound() {
-	if(progress == "TRAINING" || "TYPE_IN_ANSWER") return;
+	//console.log("A!");
+	if(progress == "TRAINING" || progress == "TYPE_IN_ANSWER") return;
 	speakGenerate();
 }
 
