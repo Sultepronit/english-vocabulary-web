@@ -7,17 +7,27 @@ main p {
 }
 
 .status {
-	background-color: red;
+	/*background-color: red;*/
 	width: 1.5em;
 	height: 1.5em;
 }
 
 input {
+	font-family: 'Gelasio', serif;
 	text-align: center;
-	font-size: 4em;
+	font-size: 3.9em;
 	font-style: italic;
-	margin: auto;
-	display: block;
+	/*margin: auto;
+	display: block;*/
+	width: 100%;
+}
+
+.typed-in {
+	font-family: 'Gelasio', serif;
+	text-align: center;
+	font-size: 3.9em;
+	font-style: italic;
+	width: 100%;
 }
 
 .training {
@@ -27,6 +37,11 @@ input {
 
 .word {
 	font-size: 4em;
+	font-family: 'Gelasio', serif;
+	width: fit-content;
+	margin: auto;
+	border-bottom: 6px solid white;
+	
 }
 
 .transcription {

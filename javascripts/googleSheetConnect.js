@@ -17,7 +17,8 @@ function getTasks () {
 			dbArray = JSON.parse(xhr.response);
 			//console.log("ok!");
 			console.log(dbArray);
-			randomWord();
+			//nextCard();
+			startSession();
         }
     };
     try { xhr.send(); } catch (err) {console.log(err) }
