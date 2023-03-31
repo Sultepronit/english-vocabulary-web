@@ -8,8 +8,10 @@ main p {
 
 .status {
 	/*background-color: red;*/
-	width: 1.5em;
-	height: 1.5em;
+	/*width: 1.5em;
+	height: 1.5em;*/
+	height: 1em;
+	font-family: 'Inconsolata', monospace;
 }
 
 input {
@@ -26,6 +28,7 @@ input {
 	font-family: 'Gelasio', serif;
 	text-align: center;
 	font-size: 3.9em;
+	height: 1em;
 	font-style: italic;
 	width: 100%;
 }
@@ -50,4 +53,8 @@ input {
 
 .translation {
 	font-size: 3em;
+}
+
+.example {
+	font-size: 2.5em;
 }

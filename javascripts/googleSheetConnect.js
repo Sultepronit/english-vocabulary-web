@@ -24,7 +24,7 @@ function getTasks () {
     try { xhr.send(); } catch (err) {console.log(err) }
 }
 
-function ToCell(num, col, newValue)
+function toCell(num, col, newValue)
 {
 	var action = "toCelll";
 	var xhr = new XMLHttpRequest();
@@ -39,7 +39,9 @@ function ToCell(num, col, newValue)
 		//getTasks ();//обновляем список задач
         }
     };
-	try { xhr.send(body);} catch (err) {console.log(err) }
+	try { xhr.send(body);} catch (err) { }
+	//try { xhr.send(body);} catch (err) {console.log(err) }
+	console.log("Saved to sheet!");
 }
 
 function saved()

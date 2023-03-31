@@ -3,12 +3,15 @@ var confirmList = [];
 var learnList = [];
 var sessionList = [];
 
-var currentCardIndex;
-var currentCard;
+var currentCardId = 0;
+var currentCard = [];
 var direction;
 var progress;
 var mark;
+
 var typedIn;
+
+var nextRepeatedStatus = 100;
 
 function startSession() {
 	
@@ -45,62 +48,64 @@ function startSession() {
 }
 
 function nextCard() {
-	$(".word").css("border-bottom", "6px solid white");
+	if(sessionList.length < 1) {
+		$(".word").text("Happy End!");
+		return;
+	}
 	
-	var nextCardStatusIndex = (sessionList.length < 5) ? 0 : randomFromRange(0, sessionList.length - 1);
-	var learnStatus = sessionList[nextCardStatusIndex];
-	console.log(nextCardStatusIndex + ": " + learnStatus);
-	sessionList.splice(nextCardStatusIndex, 1);
+	//var learnStatusIndex = (sessionList.length < 5) ? 0 : randomFromRange(0, sessionList.length - 1);
+	var learnStatusIndex = randomFromRange(0, sessionList.length - 1);
+	var learnStatus = sessionList[learnStatusIndex];
+	console.log(learnStatusIndex + ": " + learnStatus);
+	sessionList.splice(learnStatusIndex, 1);
 	console.log(sessionList);
 	
-	var currentCardId = 0;
+	var localIndex = 0;
 	switch(learnStatus) {
 		case "REPEAT":
 			console.log("repeat!");
-			currentCardIndex = randomFromRange(0, repeatList.length - 1);
-			currentCardId = repeatList[currentCardIndex];
-			repeatList.splice(currentCardIndex, 1);
+			localIndex = randomFromRange(0, repeatList.length - 1);
+			currentCardId = repeatList[localIndex];
+			repeatList.splice(localIndex, 1);
 			break;
 		case "CONFIRM":
 			console.log("confirm!");
-			currentCardIndex = randomFromRange(0, confirmList.length - 1);
-			currentCardId = confirmList[currentCardIndex];
-			confirmList.splice(currentCardIndex, 1);
+			localIndex = randomFromRange(0, confirmList.length - 1);
+			currentCardId = confirmList[localIndex];
+			confirmList.splice(localIndex, 1);
 			break;
 		case "LEARN":
 			console.log("learn!");
-			currentCardIndex = randomFromRange(0, learnList.length - 1);
-			currentCardId = learnList[currentCardIndex];
-			learnList.splice(currentCardIndex, 1);//////!!!!!!!
+			localIndex = randomFromRange(0, learnList.length - 1);
+			currentCardId = learnList[localIndex];
+			learnList.splice(localIndex, 1);//////!!!!!!!
 			console.log(learnList);
 			break;
 		default:
 			console.log("SOMETHING IS JUST WRONG!!!!!!!!!");
 			break;
 	}
-	console.log("index: " + currentCardIndex);
-	$(".card-number").text(currentCardId);
+	console.log("localIndex: " + localIndex);
 	currentCard = dbArray[currentCardId];
+	$(".card-number").text(currentCardId + ": " + currentCard[0]);
 	
-	//var randomNumber = randomFromRange(0,dbArray.length - 1);
-	//console.log(randomNumber);
-	//console.log(dbArray[randomNumber][5]);
-	//currentCard = dbArray[randomNumber];
-	direction = "FORWARD";
-	direction = "BACKWARD";
+	//direction = "FORWARD";
+	/*direction = "BACKWARD";
 	var di = randomFromRange(0, 1);
-	//if(di) 
-	direction = (di) ? "FORWARD" : "BACKWARD";
+	direction = (di) ? "FORWARD" : "BACKWARD";*/
+	//if(currentCard[1] > currentCard[2]) direction = "BACKWARD";
+	direction = (currentCard[1] > currentCard[2]) ? "BACKWARD" : "FORWARD";
+	
 	progress = "QUESTION";
 	mark = "UNEVALUATED";
 	askQuestion();
-	
-	//$(".card-number").text(randomNumber);
 }
 
 function askQuestion() {
-	//console.log(currentCard);
+	$(".word").css("border-bottom", "6px solid white");
 	$(".transcription").text(" ");
+	$(".example").text(" ");
+	
 	if(direction == "FORWARD") {
 		hideInput();
 		
@@ -142,17 +147,72 @@ function showAnswer() {
 	playSound();
 	
 	$(".transcription").text(currentCard[6]);
+	$(".example").text(currentCard[8]);
 	if(direction == "FORWARD") {
 		$(".translation").text(currentCard[7]);
 	} else { //BACKWARD
 		$(".word").text(currentCard[5]);
 	}
 	
-	//$(".status").text("evaluate");
 }
 
 function saveProgress() {
 	if(mark == "UNEVALUATED") return;
+	
+	if(currentCard[0] < 1 && mark == "NEUTRAL") mark = "BAD";
+	
+	if(direction == "FORWARD") {
+		switch(mark) {
+			case "GOOD":
+				currentCard[1]++;
+				break;
+			case "BAD":
+				currentCard[1]--;
+				break;
+		}
+	} else { //BACKWARD
+		switch(mark) {
+			case "GOOD":
+				currentCard[2]++;
+				break;
+			case "BAD":
+				currentCard[2]--;
+				break;
+		}
+	}
+	
+	//degrade
+	if(currentCard[1] < -1 || currentCard[2] < -1) {
+		if(currentCard[0] > 0) { //confrim & repeat
+			currentCard[0] = 0;
+			currentCard[1] = 0;
+			currentCard[2] = 0;
+			toCell(currentCardId + 1, 'A', currentCard[0]);
+		} else { // learn
+			if(currentCard[1] < -1) { // FORWARD
+				currentCard[1] = -1;
+			} else { // BACKWARD
+				currentCard[1] = 0;
+				currentCard[2] = 0;
+			}
+		}
+	} else if(currentCard[0] > 0) { //confirm & repeat
+		if(currentCard[1] > 0 && currentCard[2] > 0) { //upgrade confirm & repeat
+			currentCard[0] = (currentCard[0] < 2) ? 2 : nextRepeatedStatus++;
+			currentCard[1] = 0;
+			currentCard[2] = 0;
+			toCell(currentCardId + 1, 'A', currentCard[0]);
+		}
+	} else if(currentCard[1] > 1 && currentCard[2] > 1) { //upgrade learn
+		currentCard[0] = 1;
+		currentCard[1] = 0;
+		currentCard[2] = 0;
+		toCell(currentCardId + 1, 'A', currentCard[0]);
+	}
+	
+	console.log(currentCard[0] + ": " + currentCard[1] + " | " + currentCard[2]);
+	toCell(currentCardId + 1, 'B', currentCard[1]);
+	toCell(currentCardId + 1, 'C', currentCard[2]);
 	
 	if(direction == "BACKWARD" && mark == "GOOD") {
 		nextCard();
@@ -201,21 +261,18 @@ function pressedEnter() {
 
 function pressedG() {
 	if(progress != "EVALUATE") return;
-	$(".status").css("background-color", "green");
 	$(".word").css("border-bottom", "6px solid green");
 	mark = "GOOD";
 }
 
 function pressedB() {
 	if(progress != "EVALUATE") return;
-	$(".status").css("background-color", "red");
 	$(".word").css("border-bottom", "6px solid red");
 	mark = "BAD";
 }
 
 function pressedN() {
 	if(progress != "EVALUATE") return;
-	$(".status").css("background-color", "yellow");
 	$(".word").css("border-bottom", "6px solid yellow");
 	mark = "NEUTRAL";
 }
