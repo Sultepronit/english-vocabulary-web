@@ -20,7 +20,8 @@ function playSound() {
 	if(progress == "TRAINING" || progress == "TYPE_IN_ANSWER") return;
 	//speakGenerate();
 	//pronunciation1();
-	pronouciation2();
+	//pronunciation2();
+	pronunciation3();
 }
 
 var audio = new Audio();
@@ -37,7 +38,7 @@ function pronunciation1() {
 	
 }
 
-function pronouciation2() {
+function pronunciation2() {
 	//https://dictionary.cambridge.org/us/media/english/us_pron/s/spe/speci/species.mp3
 	//https://dictionary.cambridge.org/us/media/english/us_pron/m/mou/mouse/mouse.mp3
 	//https://dictionary.cambridge.org/us/media/english/us_pron/a/ace/ace__/ace.mp3
@@ -58,21 +59,43 @@ function pronouciation2() {
 	//console.log(ind);
 	/*console.log(soundUrlList[667][0]);
 	console.log(soundUrlList[667][0][0]);*/
-	var urlIndex = 0;
-	for(var urlIndex = 0; urlIndex < soundUrlList.length; urlIndex++) {
-		if(soundUrlList[urlIndex][0] == currentCard[5])	break;
+}
+
+var currentWord;
+var urlIndex = 0;
+function pronunciation3() {
+	if(currentWord != currentCard[5]) {
+		currentWord = currentCard[5];
+		urlIndex = 0;
+		for(; urlIndex < soundUrlList.length; urlIndex++) {
+			if(soundUrlList[urlIndex][0] == currentCard[5])	break;
+		}
 	}
+	/*console.log("Here!");
+	console.log(urlIndex);*/
+	
 	if(urlIndex < soundUrlList.length) {
 		//console.log(soundUrlList[urlIndex]);
-		var randomUrl = randomFromRange(1, soundUrlList[urlIndex].length);
-		console.log(soundUrlList[urlIndex][randomUrl]);
+		//var randomUrl = randomFromRange(1, soundUrlList[urlIndex].length);
+		var randomUrl;
+		for(;;) {
+			randomUrl = randomFromRange(1, soundUrlList[urlIndex].length);
+			console.log(soundUrlList[urlIndex][randomUrl]);
+			if(soundUrlList[urlIndex][randomUrl].slice(0,20) == "http://static.sfdict") continue;
+			if(soundUrlList[urlIndex][randomUrl].slice(0,20) == "http://www.yourdicti") continue;
+			if(soundUrlList[urlIndex][randomUrl].slice(0,20) == "http://www.oxforddic") continue;
+			break;
+		}
+		
+		//console.log(soundUrlList[urlIndex][randomUrl]);
+		console.log(soundUrlList[urlIndex][randomUrl].slice(0,30));
 		audio.src = soundUrlList[urlIndex][randomUrl];
 		audio.play();
 	}
 }
 
 function speakGenerate() {
-	console.log("no pronounciation!");
+	console.log("no pronunciation!");
 	let utterance = new SpeechSynthesisUtterance(currentCard[5]);
 	utterance.lang = 'en';
 	utterance.rate = 0.7;
