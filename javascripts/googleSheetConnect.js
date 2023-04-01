@@ -1,5 +1,3 @@
-//var myApp = "https://script.google.com/macros/s/AKfycbz4k3v470sDbaMdPLa9OrmwQfRARBDlMjeatCXEGnhDKbD0a7yQm7F0cNXp0WGW6Mqm/exec";
-//var myApp = "https://script.google.com/macros/s/AKfycbzOt5uEJKhDdRc5p0DJfjzVkfRS2j96LLHrl01_5KFR7TBOu0bgP86iziBqO8c-B5KE/exec"
 var myApp = "https://script.google.com/macros/s/AKfycby5Gf4_PVOZxohbTHplidiOrOQBZXOAmTRx4QhJD-nFlz8Lvq6ycu2evra0nXPeA4fB/exec";
 var dbArray = [];
 
@@ -15,9 +13,7 @@ function getTasks () {
         if (xhr.readyState == 4 && xhr.status == 200) {
         	//в случае успеха преобразуем полученный ответ в JSON и передаем отдельной функции, которая сформирует нам таблицу
 			dbArray = JSON.parse(xhr.response);
-			//console.log("ok!");
 			console.log(dbArray);
-			//nextCard();
 			startSession();
         }
     };
@@ -36,12 +32,11 @@ function toCell(num, col, newValue)
         if (xhr.readyState == 4 && xhr.status == 200) {
         	//$("#updateTaskModal").modal("hide");
         	alert(xhr.response);
-		//getTasks ();//обновляем список задач
         }
     };
 	try { xhr.send(body);} catch (err) { }
 	//try { xhr.send(body);} catch (err) {console.log(err) }
-	console.log("Saved to sheet!");
+	//console.log("Saved to sheet!");
 }
 
 function saved()

@@ -53,33 +53,40 @@ function nextCard() {
 		return;
 	}
 	
-	//var learnStatusIndex = (sessionList.length < 5) ? 0 : randomFromRange(0, sessionList.length - 1);
 	var learnStatusIndex = randomFromRange(0, sessionList.length - 1);
 	var learnStatus = sessionList[learnStatusIndex];
 	console.log(learnStatusIndex + ": " + learnStatus);
 	sessionList.splice(learnStatusIndex, 1);
 	console.log(sessionList);
 	
+	function chooseRandomCard(list) {
+		console.log("Hello there!");
+		var index = randomFromRange(0, list.length - 1);
+		currentCardId = list[index];
+		list.splice(index, 1);
+		console.log(list);
+	};
+	
 	var localIndex = 0;
 	switch(learnStatus) {
 		case "REPEAT":
-			//console.log("repeat!");
-			localIndex = randomFromRange(0, repeatList.length - 1);
+			chooseRandomCard(repeatList);
+			/*localIndex = randomFromRange(0, repeatList.length - 1);
 			currentCardId = repeatList[localIndex];
-			repeatList.splice(localIndex, 1);
+			repeatList.splice(localIndex, 1);*/
 			break;
 		case "CONFIRM":
-			//console.log("confirm!");
-			localIndex = randomFromRange(0, confirmList.length - 1);
+			chooseRandomCard(confirmList);
+			/*localIndex = randomFromRange(0, confirmList.length - 1);
 			currentCardId = confirmList[localIndex];
-			confirmList.splice(localIndex, 1);
+			confirmList.splice(localIndex, 1);*/
 			break;
 		case "LEARN":
-			//console.log("learn!");
-			localIndex = randomFromRange(0, learnList.length - 1);
+			chooseRandomCard(learnList);
+			/*localIndex = randomFromRange(0, learnList.length - 1);
 			currentCardId = learnList[localIndex];
-			learnList.splice(localIndex, 1);//////!!!!!!!
-			console.log(learnList);
+			learnList.splice(localIndex, 1);*/
+			//console.log(learnList);
 			break;
 		default:
 			console.log("SOMETHING IS JUST WRONG!!!!!!!!!");
