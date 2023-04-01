@@ -159,7 +159,18 @@ function showAnswer() {
 function saveProgress() {
 	if(mark == "UNEVALUATED") return;
 	
-	if(currentCard[0] < 1 && mark == "NEUTRAL") mark = "BAD";
+	//if(currentCard[0] < 1 && mark == "NEUTRAL") mark = "BAD";
+	if(currentCard[0] < 1) { // learn
+		if(mark == "NEUTRAL") mark = "BAD";
+		if(mark == "BAD") {
+			sessionList.push("LEARN");
+			learnList.push(currentCardId);
+			console.log("I'll be back!");
+			console.log(sessionList);
+			console.log(learnList);
+			console.log("I'm back!");
+		}
+	}
 	
 	if(direction == "FORWARD") {
 		switch(mark) {
