@@ -63,19 +63,19 @@ function nextCard() {
 	var localIndex = 0;
 	switch(learnStatus) {
 		case "REPEAT":
-			console.log("repeat!");
+			//console.log("repeat!");
 			localIndex = randomFromRange(0, repeatList.length - 1);
 			currentCardId = repeatList[localIndex];
 			repeatList.splice(localIndex, 1);
 			break;
 		case "CONFIRM":
-			console.log("confirm!");
+			//console.log("confirm!");
 			localIndex = randomFromRange(0, confirmList.length - 1);
 			currentCardId = confirmList[localIndex];
 			confirmList.splice(localIndex, 1);
 			break;
 		case "LEARN":
-			console.log("learn!");
+			//console.log("learn!");
 			localIndex = randomFromRange(0, learnList.length - 1);
 			currentCardId = learnList[localIndex];
 			learnList.splice(localIndex, 1);//////!!!!!!!
@@ -85,7 +85,7 @@ function nextCard() {
 			console.log("SOMETHING IS JUST WRONG!!!!!!!!!");
 			break;
 	}
-	console.log("localIndex: " + localIndex);
+	//console.log("localIndex: " + localIndex);
 	currentCard = dbArray[currentCardId];
 	$(".card-number").text(currentCardId + ": " + currentCard[0]);
 	

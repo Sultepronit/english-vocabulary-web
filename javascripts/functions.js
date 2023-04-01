@@ -63,18 +63,42 @@ function pronunciation2() {
 
 var currentWord;
 var urlIndex = 0;
+var links = [];
 function pronunciation3() {
 	if(currentWord != currentCard[5]) {
 		currentWord = currentCard[5];
 		urlIndex = 0;
+		links = [];
 		for(; urlIndex < soundUrlList.length; urlIndex++) {
-			if(soundUrlList[urlIndex][0] == currentCard[5])	break;
+			//if(soundUrlList[urlIndex][0] == currentWord.toLowerCase())	break;
+			if(soundUrlList[urlIndex][0] == currentWord.toLowerCase()) {
+				for(var i = 1; i < soundUrlList[urlIndex].length; i++) {
+					var prefix = soundUrlList[urlIndex][i].slice(0,20);
+					if(prefix == "http://static.sfdict") continue;
+					if(prefix == "http://www.yourdicti") continue;
+					if(prefix == "http://www.oxforddic") continue;
+					if(prefix == "http://img2.tfd.com/") continue;
+					console.log(soundUrlList[urlIndex][i]);
+					links.push(soundUrlList[urlIndex][i]);
+				}
+				break;
+			}
 		}
 	}
-	/*console.log("Here!");
-	console.log(urlIndex);*/
+	console.log("Here!");
 	
-	if(urlIndex < soundUrlList.length) {
+	if(links.length > 0) {
+		var randomUrl = randomFromRange(0, links.length - 1);
+		console.log(links[randomUrl]);
+		audio.src = links[randomUrl];
+		audio.play();
+	} else {
+		//console.log("No sound!");
+		speakGenerate();
+	}
+	/*console.log(urlIndex);*/
+	
+	/*if(urlIndex < soundUrlList.length) {
 		//console.log(soundUrlList[urlIndex]);
 		//var randomUrl = randomFromRange(1, soundUrlList[urlIndex].length);
 		var randomUrl;
@@ -91,7 +115,7 @@ function pronunciation3() {
 		console.log(soundUrlList[urlIndex][randomUrl].slice(0,30));
 		audio.src = soundUrlList[urlIndex][randomUrl];
 		audio.play();
-	}
+	}*/
 }
 
 function speakGenerate() {
