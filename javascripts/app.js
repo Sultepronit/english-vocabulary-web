@@ -1,3 +1,4 @@
+var dbArray = [];
 var repeatList = [];
 var confirmList = [];
 var learnList = [];
@@ -16,7 +17,6 @@ var nextRepeatedStatus = 100;
 function startSession() {
 	
 	for(var i = 0; i < dbArray.length; i++) {
-		//console.log(dbArray[i][0]);
 		switch(dbArray[i][0]) {
 			case 0:
 				learnList.push(i);
@@ -60,39 +60,29 @@ function nextCard() {
 	console.log(sessionList);
 	
 	function chooseRandomCard(list) {
-		console.log("Hello there!");
+		//console.log("Hello there!");
 		var index = randomFromRange(0, list.length - 1);
 		currentCardId = list[index];
 		list.splice(index, 1);
-		console.log(list);
+		//console.log(list);
 	};
 	
-	var localIndex = 0;
 	switch(learnStatus) {
 		case "REPEAT":
 			chooseRandomCard(repeatList);
-			/*localIndex = randomFromRange(0, repeatList.length - 1);
-			currentCardId = repeatList[localIndex];
-			repeatList.splice(localIndex, 1);*/
 			break;
 		case "CONFIRM":
 			chooseRandomCard(confirmList);
-			/*localIndex = randomFromRange(0, confirmList.length - 1);
-			currentCardId = confirmList[localIndex];
-			confirmList.splice(localIndex, 1);*/
 			break;
 		case "LEARN":
 			chooseRandomCard(learnList);
-			/*localIndex = randomFromRange(0, learnList.length - 1);
-			currentCardId = learnList[localIndex];
-			learnList.splice(localIndex, 1);*/
-			//console.log(learnList);
+			console.log(learnList);
 			break;
-		default:
+		/*default:
 			console.log("SOMETHING IS JUST WRONG!!!!!!!!!");
-			break;
+			break;*/
 	}
-	//console.log("localIndex: " + localIndex);
+
 	currentCard = dbArray[currentCardId];
 	$(".card-number").text(currentCardId + ": " + currentCard[0]);
 	
@@ -127,10 +117,6 @@ function askQuestion() {
 		//$(".translation").text(currentCard[7]);
 		$(".translation").replaceWith("<p class='translation'>" + currentCard[7] + "</p>");
 	}
-	//$(".translation").text("їжак / <i>амер.</i> дикобраз");
-	//$(".translation").replaceWith($("<p>").text("їжак / <i>амер.</i> дикобраз"));
-	//var text = "їжак / <i>амер.</i> дикобраз";
-	//$(".translation").replaceWith("<p class='translation'>" + text + "</p>");
 }
 
 function evaluateAnswer() {
@@ -178,9 +164,9 @@ function saveProgress() {
 		if(mark == "BAD") {
 			sessionList.push("LEARN");
 			learnList.push(currentCardId);
-			console.log("I'll be back!");
+			/*console.log("I'll be back!");
 			console.log(sessionList);
-			console.log(learnList);
+			console.log(learnList);*/
 			console.log("I'm back!");
 		}
 	}
@@ -227,7 +213,13 @@ function saveProgress() {
 		
 		//upgrade confirm & repeat
 		if(currentCard[0] > 0 && currentCard[1] > 0 && currentCard[2] > 0) { 
-			currentCard[0] = (currentCard[0] < 2) ? 2 : nextRepeatedStatus++;
+			//currentCard[0] = (currentCard[0] < 2) ? 2 : nextRepeatedStatus++;
+			if(currentCard[0] > 1) { // repeat
+				currentCard[0] = nextRepeatedStatus++;
+				toCell(2, 'L', nextRepeatedStatus);
+			} else { // confirm
+				currentCard[0] = 2;
+			}
 			currentCard[1] = 0;
 			currentCard[2] = 0;
 			toCell(currentCardId + 1, 'A', currentCard[0]);

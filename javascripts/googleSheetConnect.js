@@ -1,5 +1,4 @@
 var myApp = "https://script.google.com/macros/s/AKfycby5Gf4_PVOZxohbTHplidiOrOQBZXOAmTRx4QhJD-nFlz8Lvq6ycu2evra0nXPeA4fB/exec";
-var dbArray = [];
 
 function getTasks () {
     var action = "getTasks";
@@ -14,6 +13,8 @@ function getTasks () {
         	//в случае успеха преобразуем полученный ответ в JSON и передаем отдельной функции, которая сформирует нам таблицу
 			dbArray = JSON.parse(xhr.response);
 			console.log(dbArray);
+			nextRepeatedStatus = dbArray[1][11];
+			console.log(nextRepeatedStatus);
 			startSession();
         }
     };
