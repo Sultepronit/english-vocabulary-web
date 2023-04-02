@@ -124,8 +124,13 @@ function askQuestion() {
 		showInput();
 		
 		$(".word").text(" ");
-		$(".translation").text(currentCard[7]);
+		//$(".translation").text(currentCard[7]);
+		$(".translation").replaceWith("<p class='translation'>" + currentCard[7] + "</p>");
 	}
+	//$(".translation").text("їжак / <i>амер.</i> дикобраз");
+	//$(".translation").replaceWith($("<p>").text("їжак / <i>амер.</i> дикобраз"));
+	//var text = "їжак / <i>амер.</i> дикобраз";
+	//$(".translation").replaceWith("<p class='translation'>" + text + "</p>");
 }
 
 function evaluateAnswer() {
@@ -156,7 +161,8 @@ function showAnswer() {
 	$(".transcription").text(currentCard[6]);
 	$(".example").text(currentCard[8]);
 	if(direction == "FORWARD") {
-		$(".translation").text(currentCard[7]);
+		//$(".translation").text(currentCard[7]);
+		$(".translation").replaceWith("<p class='translation'>" + currentCard[7] + "</p>");
 	} else { //BACKWARD
 		$(".word").text(currentCard[5]);
 	}
@@ -199,7 +205,48 @@ function saveProgress() {
 		}
 	}
 	
-	//degrade
+	upgradeOrDegrade: {
+		//degrade
+		if(currentCard[1] < -1 || currentCard[2] < -1) {
+			if(currentCard[0] > 0) { //confrim & repeat
+				currentCard[0] = 0;
+				currentCard[1] = 0;
+				currentCard[2] = 0;
+				toCell(currentCardId + 1, 'A', currentCard[0]);
+			} else { // learn
+				if(currentCard[1] < -1) { // FORWARD
+					currentCard[1] = -1;
+				} else { // BACKWARD
+					currentCard[1] = 0;
+					currentCard[2] = 0;
+				}
+			}
+			console.log("degraded!");
+			break upgradeOrDegrade;
+		}
+		
+		//upgrade confirm & repeat
+		if(currentCard[0] > 0 && currentCard[1] > 0 && currentCard[2] > 0) { 
+			currentCard[0] = (currentCard[0] < 2) ? 2 : nextRepeatedStatus++;
+			currentCard[1] = 0;
+			currentCard[2] = 0;
+			toCell(currentCardId + 1, 'A', currentCard[0]);
+			console.log("repeted!");
+			break upgradeOrDegrade;
+		}
+		
+		//upgrade learn
+		if(currentCard[1] > 1 && currentCard[2] > 1) { 
+			currentCard[0] = 1;
+			currentCard[1] = 0;
+			currentCard[2] = 0;
+			toCell(currentCardId + 1, 'A', currentCard[0]);
+			console.log("learned!");
+			break upgradeOrDegrade;
+		}
+	}
+	
+	/*//degrade
 	if(currentCard[1] < -1 || currentCard[2] < -1) {
 		if(currentCard[0] > 0) { //confrim & repeat
 			currentCard[0] = 0;
@@ -226,7 +273,7 @@ function saveProgress() {
 		currentCard[1] = 0;
 		currentCard[2] = 0;
 		toCell(currentCardId + 1, 'A', currentCard[0]);
-	}
+	}*/
 	
 	console.log(currentCard[0] + ": " + currentCard[1] + " | " + currentCard[2]);
 	toCell(currentCardId + 1, 'B', currentCard[1]);
@@ -310,8 +357,8 @@ var main = function () {
 	getTasks ();
 	
 	$(document).on("keypress", function (event) {
-		/*console.log(event.keyCode);
-		console.log(event.code);
+		//console.log(event.keyCode);
+		/*console.log(event.code);
 		console.log(event.key);*/
 		$(".status").text(event.key);
 
@@ -330,6 +377,9 @@ var main = function () {
 				break;
 			case 110:
 				pressedN();
+				break;
+			case 127: 
+				pronunciation3();
 				break;
 		}
 
